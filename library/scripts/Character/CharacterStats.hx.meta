@@ -1,0 +1,17 @@
+{
+  "export": true,
+  "guid": "e24274a9-689d-4aab-9585-2a376679cdc0",
+  "id": "framyCharacterStats",
+  "language": "hscript",
+  "pluginMetadata": {
+    "com.fraymakers.FraymakersMetadata": {
+      "version": "0.3.0"
+    }
+  },
+  "plugins": [
+    "com.fraymakers.FraymakersMetadata"
+  ],
+  "tags": [
+  ],
+  "version": 1
+}
