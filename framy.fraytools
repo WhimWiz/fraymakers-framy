@@ -56,6 +56,10 @@
     {
       "id": "build0",
       "path": "../../Program Files (x86)/Steam/steamapps/common/Fraymakers/custom/Framy"
+    },
+    {
+      "id": "build1",
+      "path": "./build"
     }
   ],
   "snapToPixel": true,
