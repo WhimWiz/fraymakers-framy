@@ -32,16 +32,16 @@
 	aerialFriction: 0.22,
 	
 	//ENVIRONMENTAL COLLISION BODY (ECB) STATS
-	floorHeadPosition: 86,
-	floorHipWidth: 29,
+	floorHeadPosition: 74,
+	floorHipWidth: 30,
 	floorHipXOffset: 0,
 	floorHipYOffset: 0,
 	floorFootPosition: 0,
-	aerialHeadPosition: 86,
-	aerialHipWidth: 29,
+	aerialHeadPosition: 74,
+	aerialHipWidth: 30,
 	aerialHipXOffset: 0,
 	aerialHipYOffset: 0,
-	aerialFootPosition: 25,
+	aerialFootPosition: 5,
 
 	//CAMERA BOX STATS
 	cameraBoxOffsetX: 15,
