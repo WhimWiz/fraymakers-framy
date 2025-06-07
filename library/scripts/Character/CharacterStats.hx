@@ -10,11 +10,11 @@
 	weight: 90,
 	gravity: 0.8,
 	shortHopSpeed: 8.25,
-	jumpSpeed: 14.25,
+	jumpSpeed: 13.75,
 	//For multiple jumps define subsequent jump speeds within the brackets with commas in between (for example: [15.5, 13, 10]).
 	jumpSpeedBackwardInitialXSpeed: -3,
 	jumpSpeedForwardInitialXSpeed: 3,
-	doubleJumpSpeeds: [13.75],
+	doubleJumpSpeeds: [13.5],
 	terminalVelocity: 9.25,
 	fastFallSpeed: 14.2,
 	friction: 0.6,
@@ -44,10 +44,10 @@
 	aerialFootPosition: 25,
 
 	//CAMERA BOX STATS
-	cameraBoxOffsetX: 25,
+	cameraBoxOffsetX: 15,
 	cameraBoxOffsetY: 75,
 	cameraBoxWidth: 200,
-	cameraBoxHeight: 250,
+	cameraBoxHeight: 210,
 
 	//ROLL AND LEDGE JUMP STATS
 	techRollSpeed: 18,
@@ -81,15 +81,15 @@
 	shieldCrossupThreshold: 16,	
 	//This dictates the *visual* size of the shield, which doesn't correlate to the actual shieldable area. HIGHLY recommend adjusting the "front" and "back" number sets together (for example, subtracting/adding to both "shieldBackWidth" and "shieldFrontWidth" by the same amount at the same time), it's currently really easy to lose track of the sizing and positioning if you aren't careful. 
 	shieldFrontNineSliceContent: "global::vfx.vfx_shield_front",
-	shieldFrontXOffset: 10.5,
-	shieldFrontYOffset: 4,
-	shieldFrontWidth: 53,
-	shieldFrontHeight: 93,
+	shieldFrontXOffset: 8.5,
+	shieldFrontYOffset: 6,
+	shieldFrontWidth: 48,
+	shieldFrontHeight: 86,
 	shieldBackNineSliceContent: "global::vfx.vfx_shield_back",
-	shieldBackXOffset: 12.5,
-	shieldBackYOffset: 4,
-	shieldBackWidth: 49,
-	shieldBackHeight: 93,
+	shieldBackXOffset: 10.5,
+	shieldBackYOffset: 6,
+	shieldBackWidth: 44,
+	shieldBackHeight: 86,
 
 	//VOICE STATS
 	//Populate the brackets with IDs in parenthesis separated by commas to add them to the voice bank.
