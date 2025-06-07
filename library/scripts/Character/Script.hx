@@ -17,6 +17,8 @@ var NSPEC_PROJ_Y_OFFSET = -50;
 
 var NEUTRAL_SPECIAL_COOLDOWN = 60;
 
+var WAVEDASH_TEXT_COUNT = 4;
+
 // start general functions --- 
 
 //Runs on object init
@@ -25,6 +27,19 @@ function initialize(){
 }
 
 function update(){
+}
+
+function onWavedash() {
+    self.playAnimation("airdash_land_" + Random.getInt(0, 5));
+    var vfx = match.createVfx(new VfxStats({
+        spriteContent:self.getResource().getContent("framy"),
+        animation: "vfx_wavedash_" + Random.getInt(0, WAVEDASH_TEXT_COUNT),
+        layer: VfxLayer.FOREGROUND_EFFECTS,
+        rotation: Random.getInt(-10, 10),
+        x: self.getX(),
+        y: self.getY(),
+    }, self));
+    vfx.setAlpha(0.75);
 }
 
 // Runs when reading inputs (before determining character state, update, framescript, etc.)
