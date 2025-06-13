@@ -67,13 +67,13 @@
 
 	//AIRDASH STATS
 	airdashInitialSpeed: 11,
-	airdashSpeedCap: 12.5,
-	airdashAccelMultiplier: 0.4,
+	airdashSpeedCap: 13.25,
+	airdashAccelMultiplier: 0.5,
 	airdashCancelSpeedConservation: 0.9,
 
 	//BURY VISUAL STATS
 	buryAnimation: "hurt_thrown",
-	buryFrame: 13,
+	buryFrame: 4,
 	buryOffsetY: -10,
 
 	//SHIELD STATS
