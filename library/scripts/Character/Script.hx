@@ -7,7 +7,6 @@ var lastDisabledNSpecStatusEffect = self.makeObject(null);
 
 var downSpecialLoopCheckTimer = self.makeInt(-1);
 
-var clutchReversalTimer = self.makeInt(-1); // tracks the latest
 var clutchButtonHeld = self.makeBool(false); // Check if the clutch button is held current frame
 var clutchButtonWasHeld = self.makeBool(false); // Check if the clutch button was held prev. frame
 
@@ -17,16 +16,141 @@ var NSPEC_PROJ_Y_OFFSET = -50;
 
 var NEUTRAL_SPECIAL_COOLDOWN = 60;
 
+var UP_SPECIAL_SPEED_X = 5.25;
+var UP_SPECIAL_SPEED_Y = -20;
+var UP_SPECIAL_COOLDOWN_TIME = 60;
+var UP_SPECIAL_HITBOXSTATS = { damage: 8, angle: 270, knockbackGrowth: 5, baseKnockback: 45, hitstop: -1, selfHitstop: -1, hitstopOffset:2, selfHitstopOffset:2, limb:AttackLimb.BODY, tumbleType: TumbleType.ALWAYS, owner:self };
+
 var WAVEDASH_TEXT_COUNT = 4;
+var CLUTCH_STATES = [
+    CState.SPECIAL_UP,
+    CState.SPECIAL_SIDE
+];
+function canClutch() : Bool {
+    for (i in 0...CLUTCH_STATES.length) {
+        if (self.getState() == CLUTCH_STATES[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+var clutchAvaliable = self.makeBool(false);
+
+var upSpecIgnoreList = self.makeArray(new Array());
+
+var heldTransformationData = self.makeObject(null);
+var heldTransformationObject = self.makeObject(null);
+var heldTransformationHudSprite = self.makeObject(null);
+var heldTransformationFilter = self.makeObject(null);
+var TRANSFORMATION_FLASH_RATE = 12;
+var TRANSFORMATION_BRIGHTNESS = 0.25;
+var TRANSFORMATION_BASE_CAST_DATA:StringMap = [
+    "public::commandervideo.commandervideo" => {
+        spriteContent: self.getResource().getContent("framy"),
+        introAnimation: "transformation_commandervideo_intro",
+        abilityName: "CommanderVideo",
+        abilityGameObjectId: self.getResource().getContent("transformationCommandervideoObject"),
+        abilityCanClutch: true,
+        transformVfxColorMap: [
+            // TOP LEFT
+            0xff679464 => 0xff4a4a4a,
+            0xff40663d => 0xff323232,
+            0xff274425 => 0xff242424,
+            // TOP RIGHT
+            0xff72823f => 0xffffa632,
+            0xffa9bc71 => 0xffb66a07,
+            // BOTTOM LEFT
+            0xff608688 => 0xff36a6aa,
+            0xff416063 => 0xff197275,
+            0xff22393c => 0xff0d4b4d,
+            // BOTTOM RIGHT
+            0xff6e77a6 => 0xffdc6ca7, 
+            0xff49517f => 0xffa6497a, 
+            0xff33395d => 0xff71254d
+        ],
+        uiAnimations: {
+            spriteContent: self.getResource().getContent("menu"),
+            animation:"commandervideo_hud",
+            animation_happy:"commandervideo_hud_happy",
+            animation_sad:"commandervideo_hud_sad",
+            animation_angry:"commandervideo_hud_angry",
+            animation_hurt:"commandervideo_hud_hurt"
+        }
+    }
+];
+exports.endTransformationAttack = function() {
+    self.playFrame(self.getCurrentFrame() + 1);
+    self.resume();
+}
 
 // start general functions --- 
 
 //Runs on object init
 function initialize(){
-    self.addEventListener(GameObjectEvent.LINK_FRAMES, handleLinkFrames, {persistent:true});
+    self.addEventListener(EntityEvent.STATE_CHANGE, function() {
+        if (canClutch()) {
+            clutchAvaliable.set(true);
+        }
+        else {
+            clutchAvaliable.set(false);
+        }
+    }, {persistent: true});
+    var transShader = new HsbcColorFilter();
+    heldTransformationFilter.set(transShader);
+
+    Engine.log(self.getPlayerConfig().costume);
+    if (self.getPlayerConfig().costume == 52) {
+		__goldSparkleStart();
+	}
 }
 
 function update(){
+    if (heldTransformationData.get() != null) {
+        heldTransformationFilter.get().brightness = Math.sin((match.getElapsedFrames() % (Math.PI * TRANSFORMATION_FLASH_RATE)) / TRANSFORMATION_FLASH_RATE) * TRANSFORMATION_BRIGHTNESS;
+    }
+
+    if (self.getAnimation() == "special_up_loop") {
+        for (i in 0...self.getFoes().length){
+            var foe = self.getFoes()[i];
+            var xBuffer = 24;
+
+            var skip = false;
+            for (f in upSpecIgnoreList.get()) {
+                if (f.getUid() == foe.getUid()) {
+                    skip = true;
+                    break;
+                }
+            }
+
+            if (skip) { continue; }
+
+            if (self.getYVelocity() >= 0 && self.getX() > foe.getEcbLeftHipX() + foe.getX() - xBuffer && self.getX() < foe.getEcbRightHipX() + foe.getX() + xBuffer){
+                if (self.getY() < foe.getY() + foe.getEcbFootY() - 10 && self.getY() > foe.getY() + foe.getEcbHeadY()) {
+                    self.setY(foe.getY() + foe.getEcbHeadY() + 16);
+                    match.createVfx(new VfxStats({
+                        spriteContent: "global::vfx.vfx",
+                        animation: GlobalVfx.SPIKE_BACK,
+                        layer: VfxLayer.BACKGROUND_EFFECTS,
+                        x: self.getX(),
+                        y: self.getY()
+                    }));
+
+                    self.setYVelocity(-12);
+                    self.setXVelocity(self.getXVelocity() / 2);
+
+                    foe.takeHit(new HitboxStats(UP_SPECIAL_HITBOXSTATS));
+                    self.bringInFront(foe);
+                    self.forceStartHitstop(foe.getHitstop(), true);
+                    self.playAnimation("special_up_bounce");
+
+                    upSpecIgnoreList.get().push(foe);
+                    self.addTimer(UP_SPECIAL_COOLDOWN_TIME, 1, function() {
+                        upSpecIgnoreList.get().remove(foe);
+                    }, {persistent: true});
+                }
+            }
+        }
+    }
 }
 
 function onWavedash() {
@@ -42,35 +166,68 @@ function onWavedash() {
     vfx.setAlpha(0.75);
 }
 
-// Runs when reading inputs (before determining character state, update, framescript, etc.)
-function inputUpdateHook(pressedControls:ControlsObject, heldControls:ControlsObject) {
-    // This also runs when updating the buffer, below code should only be run on input tick
-	if (self.isFirstInputUpdate()) {
-        clutchButtonWasHeld.set(clutchButtonHeld.get());
-		clutchButtonHeld.set(heldControls.SHIELD2);
-	}
+function sideSpecialSuccess(event:GameObjectEvent) {
+    var vfx = match.createVfx(new VfxStats({
+        spriteContent: self.getResource().getContent("framy"),
+        animation: "vfx_magic_hit_light",
+        x: event.data.foe.getX(),
+        y: event.data.foe.getY() + event.data.foe.getEcbRightHipY(),
+        layer: VfxLayer.BACKGROUND_EFFECTS,
+        rotation: Random.getInt(0, 360)
+    }));
+    vfx.pause();
+    vfx.addTimer(event.data.foe.getHitstop(), 1, vfx.resume);
 
-    // This runs when reading the buffer and on input tick -
-	// Disable SHIELD2 input so engine will not see the shield2 input for shield/airdash
-    //
-    // self.getHeldControls().SHIELD2 will be false too
-    // so must use clutchButtonHeld to check for clutch input
-	pressedControls.SHIELD2 = false;
-	heldControls.SHIELD2 = false;
-}
 
-// CState-based handling for LINK_FRAMES
-// needed to ensure important code that would be skipped during the transition is still executed
-function handleLinkFrames(e){
-	if(self.inState(CState.SPECIAL_SIDE)){
-		if(self.getCurrentFrame() >= 14){
-			self.updateAnimationStats({bodyStatus:BodyStatus.NONE});
-		}
-	} else if(self.inState(CState.SPECIAL_DOWN)){
-        specialDown_resetTimer();
-        downSpecialLoopCheckTimer.set(self.addTimer(1, -1, specialDown_checkLoop));    
+    if (TRANSFORMATION_BASE_CAST_DATA.exists(event.data.foe.getGameObjectStat("spriteContent"))) {
+        obtainTransformation(TRANSFORMATION_BASE_CAST_DATA.get(event.data.foe.getGameObjectStat("spriteContent")));
+        self.playAnimation("special_side_transform_intro");
     }
 }
+
+function obtainTransformation(transformationData) {
+    heldTransformationData.set(transformationData);
+
+    if (heldTransformationHudSprite.get() != null) {
+        heldTransformationHudSprite.get().dispose();
+        heldTransformationHudSprite.set(null);
+    }
+    var hudSpr = Sprite.create(heldTransformationData.get().uiAnimations.spriteContent);
+    hudSpr.currentAnimation = heldTransformationData.get().uiAnimations.animation;
+    hudSpr.addShader(self.getCostumeShader());
+    hudSpr.x = 21;
+    hudSpr.y = 17;
+    self.getDamageCounterContainer().addChild(hudSpr);
+    heldTransformationHudSprite.set(hudSpr);
+
+    self.setDamageCounterName(self.getDefaultDamageCounterName() + " (" + transformationData.abilityName + ")");
+    self.getDamageCounterRenderSprite().visible = false;
+    self.getDamageCounterRenderSpriteFront().visible = false;
+
+    self.addFilter(heldTransformationFilter.get());
+}
+
+function removeTransformation() {
+    heldTransformationData.set(null);
+    if (heldTransformationHudSprite.get() != null) {
+        heldTransformationHudSprite.get().dispose();
+        heldTransformationHudSprite.set(null);
+    }
+
+    self.getDamageCounterRenderSprite().visible = true;
+    self.getDamageCounterRenderSpriteFront().visible = true;
+    self.setDamageCounterName(self.getDefaultDamageCounterName());
+
+    self.removeFilter(heldTransformationFilter.get());
+}
+
+function attackInterrupt(state) {
+    if (self.getAnimation() == "special_up_loop" && (state == CState.SPECIAL_NEUTRAL || state == CState.SPECIAL_SIDE || state == CState.SPECIAL_UP || state == CState.SPECIAL_DOWN)) {
+        return true;
+    }
+    return false;
+}
+
 
 function onTeardown() {
 	
@@ -80,44 +237,43 @@ function onTeardown() {
 
 // Clutch Reversal logic
 
-// Starting to hold button means not held previous frame, but held current frame
-function startedHoldingClutch() {
-    return !clutchButtonWasHeld.get() && clutchButtonHeld.get();
+function inputUpdateHook(pressedControls:ControlsObject, heldControls:ControlsObject) {
+	if (self.isFirstInputUpdate()) {
+        clutchButtonWasHeld.set(clutchButtonHeld.get());
+		clutchButtonHeld.set(heldControls.SHIELD2);
+        if (pressedControls.SHIELD2 && clutchAvaliable.get()) {
+            self.setXVelocity(-1 * self.getXVelocity());
+            self.flip();
+
+            if (heldTransformationObject.get() != null && !heldTransformationObject.get().isDisposed()) {
+                heldTransformationObject.get().flip();
+                heldTransformationObject.get().setXVelocity(-1 * heldTransformationObject.get().getXVelocity());
+            }
+
+            match.createVfx(new VfxStats({
+                spriteContent:self.getResource().getContent("framy"),
+                animation: "vfx_clutch_front",
+                layer: VfxLayer.FOREGROUND_EFFECTS,
+                x: self.getX(),
+                y: self.getY() + self.getEcbRightHipY(),
+                scaleX: self.isFacingLeft() ? -1 : 1
+            }));
+            match.createVfx(new VfxStats({
+                spriteContent:self.getResource().getContent("framy"),
+                animation: "vfx_clutch_back",
+                layer: VfxLayer.BACKGROUND_EFFECTS,
+                x: self.getX(),
+                y: self.getY() + self.getEcbRightHipY() - 2,
+                scaleX: self.isFacingLeft() ? -1 : 1
+            }));
+
+            clutchAvaliable.set(false);
+        }
+	}
+
+	pressedControls.SHIELD2 = false;
+	heldControls.SHIELD2 = false;
 }
-
-// Allow clutch reversal for the current animation (or until disabled)
-function enableClutchReversal() {
-    // remove any clutch checks if already being done in this animation
-    disableClutchReversal();
-
-    // On frame enabled, check if started holding current frame. If yes, then apply reversal and don't add the timer
-    if (startedHoldingClutch()) {
-        applyClutchReversal();
-        return;
-    }
-
-    // timer that waits until startedHoldingClutch is true, then runs applyClutchReversal
-    var timer = self.addTimer(0, -1, applyClutchReversal, {condition: startedHoldingClutch});
-    clutchReversalTimer.set(timer);
-}
-
-// Disable clutch reversal for the current move 
-function disableClutchReversal() {
-    self.removeTimer(clutchReversalTimer.get());
-    clutchReversalTimer.set(-1);
-}
-
-// Reverse momentum if clutch pressed (and enabled for current move)
-function applyClutchReversal() {
-    self.flip();
-    self.setXVelocity(-1 * self.getXVelocity());
-
-    AudioClip.play(self.getResource().getContent("downspecial"));
-    
-    // disable clutch for the rest of this animation (so no double clutch)
-    disableClutchReversal();
-}
-
 
 //Rapid Jab logic
 function jab3Loop(){

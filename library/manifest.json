@@ -90,6 +90,15 @@
     "animationStatsId": "charactertemplateNspecProjectileAnimationStats",
     "hitboxStatsId": "charactertemplateNspecProjectileHitboxStats",
     "scriptId": "charactertemplateNspecProjectileScript",
-    "costumesId": "charactertemplateCostumes"
+    "costumesId": "framyCostumes"
+  },
+  {
+    "id": "transformationCommandervideoObject",
+    "type": "customGameObject",
+    "objectStatsId": "TransformationCommandervideoStats",
+    "scriptId": "TransformationCommandervideoScript",
+    "animationStatsId": "TransformationCommandervideoAnimationStats",
+    "hitboxStatsId": "framyHitboxStats",
+    "costumesId": "framyCostumes"
   }]
 }

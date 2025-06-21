@@ -40,8 +40,6 @@ function checkRecovery() {
 	// Choose between up special or side special depending on circumstance
 	if (character.getY() >= target.getY() + RECOVERY_USPEC_Y_THRESHOLD && character.getDoubleJumpCount() > 0) {
 		upSpecialRecovery(target);
-	} else if (character.getY() < target.getY() + RECOVERY_SSPEC_Y_THRESHOLD && !sideSpecialRecoveryUsed.get()) {
-		sideSpecialRecovery(target);
 	}
 }
 

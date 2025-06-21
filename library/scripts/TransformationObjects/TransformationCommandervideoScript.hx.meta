@@ -1,0 +1,18 @@
+{
+  "export": true,
+  "guid": "31812fcf-0604-4a5b-b93b-ada7cd602d36",
+  "id": "TransformationCommandervideoScript",
+  "language": "",
+  "pluginMetadata": {
+    "com.fraymakers.FraymakersMetadata": {
+      "objectType": "CUSTOM_GAME_OBJECT",
+      "version": "0.3.0"
+    }
+  },
+  "plugins": [
+    "com.fraymakers.FraymakersMetadata"
+  ],
+  "tags": [
+  ],
+  "version": 1
+}

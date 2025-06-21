@@ -12,8 +12,8 @@
 	shortHopSpeed: 8.5,
 	jumpSpeed: 13.75,
 	//For multiple jumps define subsequent jump speeds within the brackets with commas in between (for example: [15.5, 13, 10]).
-	jumpSpeedBackwardInitialXSpeed: -3,
-	jumpSpeedForwardInitialXSpeed: 3,
+	jumpSpeedBackwardInitialXSpeed: -3.2,
+	jumpSpeedForwardInitialXSpeed: 3.2,
 	doubleJumpSpeeds: [13.75],
 	terminalVelocity: 9.25,
 	fastFallSpeed: 14.2,
@@ -21,15 +21,15 @@
 	walkSpeedInitial: 1.0,
 	walkSpeedAcceleration: 0.25,
 	walkSpeedCap: 3.15,
-	dashSpeed: 10.25,
+	dashSpeed: 10.4,
 	runSpeedInitial: 5,
 	runSpeedAcceleration: 0.55,
-	runSpeedCap: 8,
+	runSpeedCap: 8.3,
 	groundSpeedAcceleration: 0.3,
 	groundSpeedCap: 11,
 	aerialSpeedAcceleration: 0.4,
 	aerialSpeedCap: 6.25,
-	aerialFriction: 0.3,
+	aerialFriction: 0.29,
 	
 	//ENVIRONMENTAL COLLISION BODY (ECB) STATS
 	floorHeadPosition: 74,
@@ -93,11 +93,11 @@
 
 	//VOICE STATS
 	//Populate the brackets with IDs in parenthesis separated by commas to add them to the voice bank.
-	attackVoiceIds: ["attack1", "attack2", "attack3", "attack4", "attack5", "attack6", "attack7"],
+	attackVoiceIds: [],
 	hurtLightVoiceIds: [],
-	hurtMediumVoiceIds: ["hurt1", "hurt2", "hurt3", "hurt6", "hurt7"],
-	hurtHeavyVoiceIds: ["hurt5"],
-	koVoiceIds: ["hurt4"],
+	hurtMediumVoiceIds: [],
+	hurtHeavyVoiceIds: [],
+	koVoiceIds: [],
 	//Percentage chance for the voice lines to play (1 being never, 0 being always).
 	attackVoiceSilenceRate: 0.5,
 	hurtLightSilenceRate: 1,

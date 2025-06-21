@@ -1,0 +1,17 @@
+{
+  "export": true,
+  "guid": "b3df38d6-50b1-4296-a9df-e84d01d6fa29",
+  "id": "TransformationCommandervideoAnimationStats",
+  "language": "",
+  "pluginMetadata": {
+    "com.fraymakers.FraymakersMetadata": {
+      "version": "0.3.0"
+    }
+  },
+  "plugins": [
+    "com.fraymakers.FraymakersMetadata"
+  ],
+  "tags": [
+  ],
+  "version": 1
+}

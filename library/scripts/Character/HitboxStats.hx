@@ -18,16 +18,16 @@
 		hitbox1: { damage: 14, knockbackGrowth: 70, baseKnockback: 60, angle: 30, limb:AttackLimb.FOOT }
 	},
 	tilt_up: {
-		hitbox0: { damage: 8, knockbackGrowth: 55, baseKnockback: 55, angle: 90, limb:AttackLimb.FIST },
+		hitbox0: { damage: 12, knockbackGrowth: 55, baseKnockback: 55, angle: 35, limb:AttackLimb.FIST, reversibleAngle: false },
 	},
 	tilt_down: {
-		hitbox0: { damage: 7, angle: 65, baseKnockback: 65, knockbackGrowth: 65, hitstop: -1, selfHitstop: -1, limb:AttackLimb.FOOT},
-		hitbox1: { damage: 7, angle: 65, baseKnockback: 65, knockbackGrowth: 65, hitstop: -1, selfHitstop: -1, limb:AttackLimb.FOOT}
+		hitbox0: { damage: 7, angle: 75, baseKnockback: 55, knockbackGrowth: 60, hitstop: -1, selfHitstop: -1, limb:AttackLimb.BATTERING},
+		hitbox1: { damage: 11, angle: 85, baseKnockback: 70, knockbackGrowth: 65, hitstop: -1, selfHitstop: -1, limb:AttackLimb.BATTERING}
 	},
 
 	//STRONG ATTACKS
 	strong_forward_attack: {
-		hitbox0: {damage: 13, angle: 40, baseKnockback: 68, knockbackGrowth: 75, hitstop: -1, selfHitstop:-1, limb:AttackLimb.FOOT}
+		hitbox0: {damage: 14, angle: 50, baseKnockback: 65, knockbackGrowth: 72, hitstop: -1, selfHitstop:-1, limb:AttackLimb.FIST}
 	},
 	strong_up_attack: {
 		hitbox0: { damage: 10, knockbackGrowth: 70, baseKnockback: 60, hitstop: -1, hitstun: -1, angle: 80, limb:AttackLimb.FIST },
@@ -43,8 +43,8 @@
 		hitbox0: { damage: 10, angle: 361, baseKnockback: 40, knockbackGrowth: 65, hitstop:-1, selfHitstop:-1, limb:AttackLimb.FOOT},
 		hitbox1: { damage: 10, angle: 361, baseKnockback: 40, knockbackGrowth: 65, hitstop:-1, selfHitstop:-1, limb:AttackLimb.FOOT}
 	}*/{
-		hitbox0: { damage: 4, angle: 45, baseKnockback: 66, knockbackGrowth: 5, hitstop: -1, selfHitstop: -1, reversibleAngle: false, limb:AttackLimb.FOOT },
-		hitbox1: { damage: 7, angle: 65, baseKnockback: 77, knockbackGrowth: 35, hitstop: -1, selfHitstop: -1, reversibleAngle: false, limb:AttackLimb.FOOT}
+		hitbox0: { damage: 4, angle: SpecialAngle.AUTOLINK_STRONGEST/*50*/, baseKnockback: 62, knockbackGrowth: 5, hitstop: -1, selfHitstop: -1, reversibleAngle: false, limb:AttackLimb.FOOT },
+		hitbox1: { damage: 7, angle: 55, baseKnockback: 75, knockbackGrowth: 35, hitstop: -1, selfHitstop: -1, reversibleAngle: false, limb:AttackLimb.FOOT}
 	},
 	aerial_forward: {
 		hitbox0: { damage: 10, angle: 315, knockbackGrowth: 25, baseKnockback: 30, hitstop: -1, selfHitstop: -1, limb:AttackLimb.FIST },
@@ -75,12 +75,13 @@
 		hitbox0: {}
 	},
 	special_side: {
-		hitbox0: { damage: 1, knockbackGrowth: 0, baseKnockback: 80, hitstop: 2, selfHitstop:2, hitstun: -1, hitstopNudgeMultiplier:0, directionalInfluence: false, reversibleAngle: false, angle: SpecialAngle.AUTOLINK_STRONGER, jabResetType:JabResetType.NEVER, limb:AttackLimb.FIST, knockbackCap:75 },
-		hitbox1: { damage: 1, knockbackGrowth: 0, baseKnockback: 80, hitstop: 2, selfHitstop:2, hitstun: -1, hitstopNudgeMultiplier:0, directionalInfluence: false, reversibleAngle: false, angle: SpecialAngle.AUTOLINK_STRONGER, jabResetType:JabResetType.NEVER, limb:AttackLimb.FIST, knockbackCap:75 },
+		hitbox0: {}
 	},
 	special_side_air: {
-		hitbox0: { damage: 1, knockbackGrowth: 50, baseKnockback: 80, hitstop: 2, selfHitstop:2, hitstun: -1, hitstopNudgeMultiplier:0, directionalInfluence: false, reversibleAngle: false, angle: SpecialAngle.AUTOLINK_STRONGER, jabResetType:JabResetType.NEVER, limb:AttackLimb.FIST, knockbackCap:75 },
-		hitbox1: { damage: 1, knockbackGrowth: 50, baseKnockback: 80, hitstop: 2, selfHitstop:2, hitstun: -1, hitstopNudgeMultiplier:0, directionalInfluence: false, reversibleAngle: false, angle: SpecialAngle.AUTOLINK_STRONGER, jabResetType:JabResetType.NEVER, limb:AttackLimb.FIST, knockbackCap:75 },
+		hitbox0: {}
+	},
+	special_side_attack: {
+		hitbox0: { damage: 3, knockbackGrowth: 0, baseKnockback: 88, hitstop: -1, selfHitstop:-1, hitstopOffset:4, selfHitstopOffset:4, hitstun: -1, reversibleAngle: false, angle: 90, tumbleType: TumbleType.ALWAYS, limb:AttackLimb.SWORD, shieldable: false, hitEffectOverride: "#n/a", hitSoundOverride: GlobalSfx.MENU_SELECT}
 	},
 	special_up: {
 		hitbox0: {damage: 2, knockbackGrowth: 100, baseKnockback: 140, hitstop: 2, selfHitstop: 2, hitstun: -1, hitstopNudgeMultiplier:0, directionalInfluence: false, reversibleAngle: false, angle: SpecialAngle.AUTOLINK_STRONGER, limb:AttackLimb.FIST, knockbackCap:75}
@@ -119,6 +120,12 @@
 	},
 	emote: {
 		hitbox0: {}
+	},
+
+	// TRANSFORMATION ATTACKS
+	transformation_commandervideo_attack: {
+		hitbox0: { damage: 1, angle:SpecialAngle.AUTOLINK_STRONGER, baseKnockback: 35, hitstop: 1, selfHitstop: 0, hitstun: -1, directionalInfluence:false, absorbable: true, reflectable:false, reversibleAngle: false, hitstopNudgeMultiplier: 0, knockbackCap: 50 },
+		hitbox1: { damage: 1, reversibleAngle: false, angle:SpecialAngle.AUTOLINK_STRONGER, baseKnockback: 100, hitstop: 1, selfHitstop: 0, hitstun: -1, knockbackCap:75, directionalInfluence:false, absorbable: true, hitstopNudgeMultiplier: 0, knockbackCap: 75 }
 	}
 
 	//UNUSED ATTACKS (Example attacks that are currently not used. You can rename the HitboxStats and the animation if you'd like to replace an existing animation.)
