@@ -10,6 +10,8 @@ var downSpecialLoopCheckTimer = self.makeInt(-1);
 var clutchButtonHeld = self.makeBool(false); // Check if the clutch button is held current frame
 var clutchButtonWasHeld = self.makeBool(false); // Check if the clutch button was held prev. frame
 
+var airdashVfx = self.makeObject(null);
+
 //offset projectile start position
 var NSPEC_PROJ_X_OFFSET = 40;
 var NSPEC_PROJ_Y_OFFSET = -50;
@@ -87,14 +89,7 @@ exports.endTransformationAttack = function() {
 
 //Runs on object init
 function initialize(){
-    self.addEventListener(EntityEvent.STATE_CHANGE, function() {
-        if (canClutch()) {
-            clutchAvaliable.set(true);
-        }
-        else {
-            clutchAvaliable.set(false);
-        }
-    }, {persistent: true});
+    self.addEventListener(EntityEvent.STATE_CHANGE, onStateChange, {persistent: true});
     var transShader = new HsbcColorFilter();
     heldTransformationFilter.set(transShader);
 
@@ -150,6 +145,29 @@ function update(){
                 }
             }
         }
+    }
+}
+
+function onStateChange(event:EntityEvent) {
+    if (!self.inStateGroup(CStateGroup.AIRDASH) && airdashVfx.get() != null && !airdashVfx.get().isDisposed()) {
+        airdashVfx.get().kill();
+        airdashVfx.set(null);
+    }
+
+    clutchAvaliable.set(canClutch());
+}
+
+function generateFramyAirdashVfx(angle:Int) {
+    airdashVfx.set(match.createVfx(new VfxStats({
+        spriteContent: self.getResource().getContent("framy"),
+        animation: "vfx_airdash_sparkles",
+        layer: VfxLayer.BACKGROUND_EFFECTS,
+        y: self.getEcbRightHipY() + 12,
+        rotation: angle * (self.isFacingRight() ? -1 : 1)
+    }, self)));
+    airdashVfx.get().attachTo(self);
+    if (self.isFacingLeft()) {
+        airdashVfx.get().flip();
     }
 }
 

@@ -21,9 +21,13 @@
 		hitbox0: { damage: 12, knockbackGrowth: 55, baseKnockback: 55, angle: 35, limb:AttackLimb.FIST, reversibleAngle: false },
 	},
 	tilt_down: {
+		hitbox0: { damage: 6, angle: 80, baseKnockback: 75, knockbackGrowth: 5, hitstop: -1, hitstun: -1.2, selfHitstop: -1, limb:AttackLimb.BATTERING},
+		hitbox1: { damage: 7, angle: 80, baseKnockback: 70, knockbackGrowth: 75, hitstop: -0.5, selfHitstop: -0.5, limb:AttackLimb.BATTERING}
+	},
+	/*tilt_down: {
 		hitbox0: { damage: 7, angle: 75, baseKnockback: 55, knockbackGrowth: 60, hitstop: -1, selfHitstop: -1, limb:AttackLimb.BATTERING},
 		hitbox1: { damage: 11, angle: 85, baseKnockback: 70, knockbackGrowth: 65, hitstop: -1, selfHitstop: -1, limb:AttackLimb.BATTERING}
-	},
+	},*/
 
 	//STRONG ATTACKS
 	strong_forward_attack: {
@@ -35,7 +39,7 @@
 		hitbox2: { damage: 12, knockbackGrowth: 80, baseKnockback: 65, hitstop: -1, selfHitstop:-1, hitstopOffset:3, selfHitstopOffset:3, angle: 90, limb:AttackLimb.FIST }
 	},
 	strong_down_attack: {
-		hitbox0: {damage: 7, angle: 270, baseKnockback: 65, knockbackGrowth: 80, hitstop: -1, selfHitstop:-1, buryType: BuryType.BURY, buryTimeBase: 30, buryTimeScaling: 1.5, limb:AttackLimb.BODY}
+		hitbox0: {damage: 9, angle: 30, baseKnockback: 65, knockbackGrowth: 75, hitstop: -1, selfHitstop:-1, limb:AttackLimb.UNDEFINED}
 	},
 
 	//AERIAL ATTACKS
