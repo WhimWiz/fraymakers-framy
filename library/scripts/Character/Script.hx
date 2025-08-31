@@ -1,6 +1,5 @@
 // API Script
 
-
 var neutralSpecialProjectile = self.makeObject(null); // Tracks active Neutral Special projectile (in case we need to handle any special cases)
 
 var lastDisabledNSpecStatusEffect = self.makeObject(null);
@@ -21,7 +20,7 @@ var NEUTRAL_SPECIAL_COOLDOWN = 60;
 var UP_SPECIAL_SPEED_X = 5.25;
 var UP_SPECIAL_SPEED_Y = -20;
 var UP_SPECIAL_COOLDOWN_TIME = 60;
-var UP_SPECIAL_HITBOXSTATS = { damage: 8, angle: 270, knockbackGrowth: 5, baseKnockback: 45, hitstop: -1, selfHitstop: -1, hitstopOffset:2, selfHitstopOffset:2, limb:AttackLimb.BODY, tumbleType: TumbleType.ALWAYS, owner:self };
+var UP_SPECIAL_HITBOXSTATS = { damage: 8, angle: 270, knockbackGrowth: 5, baseKnockback: 52, hitstop: -1, selfHitstop: -1, hitstopOffset:2, selfHitstopOffset:2, limb:AttackLimb.BODY, tumbleType: TumbleType.ALWAYS, owner:self };
 
 var WAVEDASH_TEXT_COUNT = 4;
 var CLUTCH_STATES = [
@@ -42,6 +41,7 @@ var upSpecIgnoreList = self.makeArray(new Array());
 
 var heldTransformationData = self.makeObject(null);
 var heldTransformationObject = self.makeObject(null);
+var heldTransformationOffscreenSprite = self.makeObject(null);
 var heldTransformationHudSprite = self.makeObject(null);
 var heldTransformationFilter = self.makeObject(null);
 var TRANSFORMATION_FLASH_RATE = 12;
@@ -104,10 +104,22 @@ function update(){
         heldTransformationFilter.get().brightness = Math.sin((match.getElapsedFrames() % (Math.PI * TRANSFORMATION_FLASH_RATE)) / TRANSFORMATION_FLASH_RATE) * TRANSFORMATION_BRIGHTNESS;
     }
 
+    if (heldTransformationOffscreenSprite.get() != null) {
+        if (heldTransformationObject.get() != null) {
+            heldTransformationOffscreenSprite.get().currentAnimation = heldTransformationObject.get().getAnimation();
+            heldTransformationOffscreenSprite.get().currentFrame = heldTransformationObject.get().getCurrentFrame();
+        }
+        else {
+            heldTransformationOffscreenSprite.get().dispose();
+            heldTransformationOffscreenSprite.set(null);
+        }
+    }
+
     if (self.getAnimation() == "special_up_loop") {
         for (i in 0...self.getFoes().length){
             var foe = self.getFoes()[i];
             var xBuffer = 24;
+            var yBuffer = 10;
 
             var skip = false;
             for (f in upSpecIgnoreList.get()) {
@@ -119,9 +131,10 @@ function update(){
 
             if (skip) { continue; }
 
-            if (self.getYVelocity() >= 0 && self.getX() > foe.getEcbLeftHipX() + foe.getX() - xBuffer && self.getX() < foe.getEcbRightHipX() + foe.getX() + xBuffer){
-                if (self.getY() < foe.getY() + foe.getEcbFootY() - 10 && self.getY() > foe.getY() + foe.getEcbHeadY()) {
+            if (self.getYVelocity() >= -1 && self.getX() > foe.getEcbLeftHipX() + foe.getX() - xBuffer && self.getX() < foe.getEcbRightHipX() + foe.getX() + xBuffer){
+                if (self.getY() < foe.getY() + foe.getEcbFootY() + yBuffer && self.getY() > foe.getY() + foe.getEcbHeadY() - yBuffer) {
                     self.setY(foe.getY() + foe.getEcbHeadY() + 16);
+                    self.setX(foe.getX());
                     match.createVfx(new VfxStats({
                         spriteContent: "global::vfx.vfx",
                         animation: GlobalVfx.SPIKE_BACK,
@@ -144,6 +157,21 @@ function update(){
                     }, {persistent: true});
                 }
             }
+        }
+    }
+
+    if (heldTransformationHudSprite.get() != null) {
+        switch(self.getDamageCounterRenderSprite().currentAnimation) {
+            case "hud":
+                heldTransformationHudSprite.get().currentAnimation = heldTransformationData.get().uiAnimations.animation;
+            case "hud_angry":
+                heldTransformationHudSprite.get().currentAnimation = heldTransformationData.get().uiAnimations.animation_angry;
+            case "hud_happy":
+                heldTransformationHudSprite.get().currentAnimation = heldTransformationData.get().uiAnimations.animation_happy;
+            case "hud_hurt":
+                heldTransformationHudSprite.get().currentAnimation = heldTransformationData.get().uiAnimations.animation_hurt;
+            case "hud_sad":
+                heldTransformationHudSprite.get().currentAnimation = heldTransformationData.get().uiAnimations.animation_sad;
         }
     }
 }
@@ -196,9 +224,12 @@ function sideSpecialSuccess(event:GameObjectEvent) {
     vfx.pause();
     vfx.addTimer(event.data.foe.getHitstop(), 1, vfx.resume);
 
-
     if (TRANSFORMATION_BASE_CAST_DATA.exists(event.data.foe.getGameObjectStat("spriteContent"))) {
         obtainTransformation(TRANSFORMATION_BASE_CAST_DATA.get(event.data.foe.getGameObjectStat("spriteContent")));
+        self.playAnimation("special_side_transform_intro");
+    }
+    else if (event.data.foe.exports.getFramyTransformationData != null) {
+        obtainTransformation(event.data.foe.exports.getFramyTransformationData());
         self.playAnimation("special_side_transform_intro");
     }
 }
@@ -223,6 +254,26 @@ function obtainTransformation(transformationData) {
     self.getDamageCounterRenderSpriteFront().visible = false;
 
     self.addFilter(heldTransformationFilter.get());
+}
+
+function activateTransformation() {
+    if (!heldTransformationData.get().abilityCanClutch) {
+        clutchAvaliable.set(false);
+    }
+    if (heldTransformationData.get().abilityGameObjectId != null) {
+        heldTransformationObject.set(match.createCustomGameObject(heldTransformationData.get().abilityGameObjectId, self));
+
+        var offscreenSpr = Sprite.create(heldTransformationObject.get().getGameObjectStat("spriteContent"));
+        offscreenSpr.currentAnimation = heldTransformationObject.get().getAnimation();
+        offscreenSpr.currentFrame = heldTransformationObject.get().getCurrentFrame();
+        offscreenSpr.addShader(self.getCostumeShader());
+
+        self.getOffscreenIndicator().getSpriteContainer().addChild(offscreenSpr);
+        self.getOffscreenIndicator().applyShaderEffects(offscreenSpr);
+
+        heldTransformationOffscreenSprite.set(offscreenSpr);
+    }
+    removeTransformation();
 }
 
 function removeTransformation() {

@@ -57,10 +57,11 @@
     "name": "Framy",
     "description": "A character made by the Fraymakers community.",
     "type": "assist",
-    "objectStatsId": "framyCharacterStats",
-    "animationStatsId": "framyAnimationStats",
-    "hitboxStatsId": "framyHitboxStats",
-    "scriptId": "framyScript",
+    "assistControllerId": "framyassistController",
+    "objectStatsId": "framyassistStats",
+    "animationStatsId": "framyassistAnimationStats",
+    "hitboxStatsId": "framyassistHitboxStats",
+    "scriptId": "framyassistScript",
     "costumesId": "framyCostumes",
     "metadata": {
       "ui":{
@@ -82,6 +83,11 @@
         }
       }
     }
+  },
+  {
+    "id": "framyassistController",
+    "type": "assistController",
+    "scriptId": "framyassistControllerScript"
   },
   {
     "id": "characterTemplateNspecProjectile",

@@ -11,7 +11,7 @@
 		hitbox0: { damage: 1, angle: 85, baseKnockback: 17, knockbackGrowth: 0, hitstop: 1, selfHitstop: 3, hitstopNudgeMultiplier: 0.5, limb:AttackLimb.FOOT }
 	},
 	dash_attack: {
-		hitbox0: {damage: 11, angle: 45, baseKnockback: 55, knockbackGrowth: 80, hitstop:-1, selfHitstop:-1, limb:AttackLimb.FOOT }
+		hitbox0: {damage: 9, angle: 50, baseKnockback: 52, knockbackGrowth: 60, hitstop:-1, selfHitstop:-1, limb:AttackLimb.BODY, reversibleAngle: false }
 	},	
 	tilt_forward: {
 		hitbox0: { damage: 11, knockbackGrowth: 60, baseKnockback: 50, angle: 38, limb:AttackLimb.FOOT },
@@ -21,9 +21,13 @@
 		hitbox0: { damage: 12, knockbackGrowth: 55, baseKnockback: 55, angle: 35, limb:AttackLimb.FIST, reversibleAngle: false },
 	},
 	tilt_down: {
+		hitbox0: { damage: 9, angle: 65, baseKnockback: 65, knockbackGrowth: 45, hitstop: -1, hitstun: -1, selfHitstop: -1, limb:AttackLimb.BODY, reversibleAngle: false},
+		hitbox1: { damage: 11, angle: 85, baseKnockback: 70, knockbackGrowth: 50, hitstop: -1, selfHitstop: -1, limb:AttackLimb.HEAD, reversibleAngle: false}
+	},
+	/*tilt_down: {
 		hitbox0: { damage: 6, angle: 80, baseKnockback: 75, knockbackGrowth: 5, hitstop: -1, hitstun: -1.2, selfHitstop: -1, limb:AttackLimb.BATTERING},
 		hitbox1: { damage: 7, angle: 80, baseKnockback: 70, knockbackGrowth: 75, hitstop: -0.5, selfHitstop: -0.5, limb:AttackLimb.BATTERING}
-	},
+	},*/
 	/*tilt_down: {
 		hitbox0: { damage: 7, angle: 75, baseKnockback: 55, knockbackGrowth: 60, hitstop: -1, selfHitstop: -1, limb:AttackLimb.BATTERING},
 		hitbox1: { damage: 11, angle: 85, baseKnockback: 70, knockbackGrowth: 65, hitstop: -1, selfHitstop: -1, limb:AttackLimb.BATTERING}
@@ -47,8 +51,8 @@
 		hitbox0: { damage: 10, angle: 361, baseKnockback: 40, knockbackGrowth: 65, hitstop:-1, selfHitstop:-1, limb:AttackLimb.FOOT},
 		hitbox1: { damage: 10, angle: 361, baseKnockback: 40, knockbackGrowth: 65, hitstop:-1, selfHitstop:-1, limb:AttackLimb.FOOT}
 	}*/{
-		hitbox0: { damage: 4, angle: SpecialAngle.AUTOLINK_STRONGEST/*50*/, baseKnockback: 62, knockbackGrowth: 5, hitstop: -1, selfHitstop: -1, reversibleAngle: false, limb:AttackLimb.FOOT },
-		hitbox1: { damage: 7, angle: 55, baseKnockback: 75, knockbackGrowth: 35, hitstop: -1, selfHitstop: -1, reversibleAngle: false, limb:AttackLimb.FOOT}
+		hitbox0: { damage: 4, angle: 35, baseKnockback: 50, knockbackGrowth: 0, hitstop: -1, selfHitstop: -1, directionalInfluence: false, reversibleAngle: false, limb:AttackLimb.FOOT, hitstopNudgeMultiplier:0 },
+		hitbox1: { damage: 7, angle: 45, baseKnockback: 70, knockbackGrowth: 30, hitstop: -1, selfHitstop: -1, reversibleAngle: false, limb:AttackLimb.FOOT}
 	},
 	aerial_forward: {
 		hitbox0: { damage: 10, angle: 315, knockbackGrowth: 25, baseKnockback: 30, hitstop: -1, selfHitstop: -1, limb:AttackLimb.FIST },
@@ -63,11 +67,11 @@
 		hitbox1: { damage: 7, angle: 115, knockbackGrowth: 55, baseKnockback: 60, hitstop: -1, selfHitstop: -1, hitstopOffset:3, selfHitstopOffset:3, limb:AttackLimb.BATTERING, reversibleAngle: false}
 	},
 	aerial_up: {
-		hitbox0: { damage: 7, knockbackGrowth: 40, baseKnockback: 55, hitstop: -1, selfHitstop: -1, hitstun: -1, angle:75, limb:AttackLimb.FIST },
-		hitbox1: { damage: 12, knockbackGrowth: 70, baseKnockback: 65, hitstop: -1, selfHitstop: -1, hitstun: -1, angle:85, limb:AttackLimb.FIST }
+		hitbox0: { damage: 9, knockbackGrowth: 60, baseKnockback: 60, hitstop: -1, selfHitstop: -1, hitstun: -1, angle:78, limb:AttackLimb.HEAD },
+		hitbox1: { damage: 12, knockbackGrowth: 70, baseKnockback: 65, hitstop: -1, selfHitstop: -1, hitstun: -1, angle:85, limb:AttackLimb.HEAD }
 	},
 	aerial_down: {
-		hitbox0: { damage: 9, angle: 150, baseKnockback: 45, knockbackGrowth: 40, hitstop:-1, selfHitstop:-1, limb:AttackLimb.FOOT, reversibleAngle: false },
+		hitbox0: { damage: 9, angle: 150, baseKnockback: 55, knockbackGrowth: 40, hitstop:-1, selfHitstop:-1, limb:AttackLimb.FOOT, reversibleAngle: false },
 		hitbox1: { damage: 12, angle: 160, baseKnockback: 60, knockbackGrowth: 55, hitstop:-1, selfHitstop:-1, limb:AttackLimb.FOOT, reversibleAngle: false }
 	},
 

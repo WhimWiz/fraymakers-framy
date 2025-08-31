@@ -1,5 +1,4 @@
 
-
 function initialize() {
     self.setX(self.getOwner().getX());
     self.setY(self.getOwner().getY());

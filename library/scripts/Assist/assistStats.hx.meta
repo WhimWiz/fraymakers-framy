@@ -1,0 +1,17 @@
+{
+  "export": true,
+  "guid": "9750bab1-d27e-46c6-a59b-637f6d0b3d35",
+  "id": "framyassistStats",
+  "language": "",
+  "pluginMetadata": {
+    "com.fraymakers.FraymakersMetadata": {
+      "version": "0.3.0"
+    }
+  },
+  "plugins": [
+    "com.fraymakers.FraymakersMetadata"
+  ],
+  "tags": [
+  ],
+  "version": 1
+}

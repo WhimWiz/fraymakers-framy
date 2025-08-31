@@ -1,0 +1,18 @@
+{
+  "export": true,
+  "guid": "865e5a69-daba-4981-a5aa-19d5a8ee35e1",
+  "id": "framyassistControllerScript",
+  "language": "",
+  "pluginMetadata": {
+    "com.fraymakers.FraymakersMetadata": {
+      "objectType": "ASSIST",
+      "version": "0.3.0"
+    }
+  },
+  "plugins": [
+    "com.fraymakers.FraymakersMetadata"
+  ],
+  "tags": [
+  ],
+  "version": 1
+}
